@@ -1,38 +1,63 @@
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode"; // Importação correta
 import api from "../services/api";
 import { ILogin } from "../interfaces/login";
 
-const token = "fuji";
+const tokenKey = "fuji"; // Chave para armazenar o token
 
 export const authService = {
-  async autenticarUser(data: ILogin) {
-    return await api.post("auth/login", data);
+  async authenticUser(data: ILogin) {
+    try {
+      const response = await api.post("auth/login", data);
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao autenticar usuário:", error);
+      throw error;
+    }
   },
 
   setToken(data: any) {
-    localStorage.setItem(token, data);
+    try {
+      localStorage.setItem(tokenKey, data);
+    } catch (error) {
+      console.error("Erro ao definir o token no localStorage:", error);
+    }
   },
 
   getToken() {
-    return localStorage.getItem(token);
+    try {
+      return localStorage.getItem(tokenKey);
+    } catch (error) {
+      console.error("Erro ao obter o token do localStorage:", error);
+      return null;
+    }
   },
 
   removeToken() {
-    localStorage.removeItem(token);
+    try {
+      localStorage.removeItem(tokenKey);
+    } catch (error) {
+      console.error("Erro ao remover o token do localStorage:", error);
+    }
   },
 
   decodificarToken(token: string | null | undefined) {
     if (token) {
-      const decode = jwtDecode(token);
-      return decode;
+      try {
+        const decode:any = jwtDecode(token);
+        return decode;
+      } catch (error) {
+        console.error("Erro ao decodificar o token:", error);
+        return null;
+      }
     }
     return null;
   },
 
   getRole() {
-    const role = this.decodificarToken(this.getToken());
-    if (role) {
-      return role?.role;
+    const token = this.getToken();
+    const decodedToken:any = this.decodificarToken(token);
+    if (decodedToken) {
+      return decodedToken?.role;
     }
     return null;
   },

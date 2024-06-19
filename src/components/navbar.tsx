@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
-import { LEVEL } from "../enums/level";
 import { LogOut } from "lucide-react";
 
 export function Navbar() {

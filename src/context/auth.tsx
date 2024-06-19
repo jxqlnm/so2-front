@@ -18,7 +18,7 @@ export function AuthProvider({ children }: any) {
   );
 
   const login = async (data: ILogin) => {
-    await authService.autenticarUser(data).then(async (resp) => {
+    await authService.authenticUser(data).then(async (resp) => {
       console.log(resp);
 
       switch (resp.status) {
