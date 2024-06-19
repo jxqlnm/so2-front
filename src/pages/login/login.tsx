@@ -33,10 +33,10 @@ export function Login() {
   return (
     <>
       <div className="flex flex-col space-y-5 items-center min-h-screen">
-        <h1>Fuji</h1>
+        <h1 className="text-3xl">Fuji</h1>
         {modal && <ModalError mensagem="Login ou senha inválidos" />}
-        <TextField valor={login} setValor={setLogin} nome="Usuário:" />
-        <PasswordField valor={senha} setValor={setSenha} nome="Senha:" />
+        <TextField valor={login} setValor={setLogin} nome="Usuário" />
+        <PasswordField valor={senha} setValor={setSenha} nome="Senha" />
         <button onClick={(e) => handleLogin(e)} className="btn">
           Login
         </button>
