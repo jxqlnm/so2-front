@@ -19,25 +19,19 @@ export function AuthProvider({ children }: any) {
 
   const login = async (data: ILogin) => {
     await authService.authenticUser(data).then(async (resp) => {
-      console.log(resp);
+      const respToken = resp.access_token;
+      if (respToken) {
+        authService.setToken(respToken);
+        setToken(respToken);
+        const respRole = authService.decodificarToken(respToken)?.role;
+        if (respRole) {
+          setRole(respRole);
+        }
+      }
 
-      switch (resp.status) {
-        case 201:
-          const respToken = resp.data.access_token;
-          if (respToken) {
-            authService.setToken(respToken);
-            setToken(respToken);
-            const respRole = authService.decodificarToken(respToken)?.role;
-            if (respRole) {
-              setRole(respRole);
-            }
-          }
-          break;
-        case 401:
-          setToken(null);
-          throw new Error("Login ou senha inválidos");
-        default:
-          throw new Error("Erro na validação de usuário");
+      if (resp.status === 401) {
+        setToken(null);
+        throw new Error("Login ou senha inválidos");
       }
     });
   };

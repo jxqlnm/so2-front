@@ -1,4 +1,4 @@
-import {jwtDecode} from "jwt-decode"; // Importação correta
+import { jwtDecode } from "jwt-decode"; // Importação correta
 import api from "../services/api";
 import { ILogin } from "../interfaces/login";
 
@@ -17,6 +17,8 @@ export const authService = {
 
   setToken(data: any) {
     try {
+      console.log(data);
+      console.log("aa");
       localStorage.setItem(tokenKey, data);
     } catch (error) {
       console.error("Erro ao definir o token no localStorage:", error);
@@ -43,7 +45,7 @@ export const authService = {
   decodificarToken(token: string | null | undefined) {
     if (token) {
       try {
-        const decode:any = jwtDecode(token);
+        const decode: any = jwtDecode(token);
         return decode;
       } catch (error) {
         console.error("Erro ao decodificar o token:", error);
@@ -55,7 +57,7 @@ export const authService = {
 
   getRole() {
     const token = this.getToken();
-    const decodedToken:any = this.decodificarToken(token);
+    const decodedToken: any = this.decodificarToken(token);
     if (decodedToken) {
       return decodedToken?.role;
     }
