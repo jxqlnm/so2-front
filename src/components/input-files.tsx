@@ -7,13 +7,16 @@ interface InputFileProps {
 export function InputFile(props: InputFileProps) {
   return (
     <>
-      <div className="flex flex-col">
-        <label className="form-control w-full max-w-xs">
+      <div className="flex-col">
+        <label className="form-control w-full ">
           <input
+            accept=".png, .jpg, .jpeg, .svg"
             multiple
+            name="file"
+            id="file"
             onChange={(e) => props.setFiles(e)}
             type="file"
-            className="file-input bg-white file-input-sm file-input-bordered w-full max-w-xs"
+            className="file-input bg-white file-input-sm file-input-bordered w-full "
           />
           <div className="label">
             <span className="label-text-alt">{props.label}</span>

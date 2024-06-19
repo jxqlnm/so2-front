@@ -1,6 +1,6 @@
 export enum CATEGORIA {
-  PORCAO = "porcao",
-  BEBIDA = "bebida",
-  COMBO = "combo",
-  DIVERSOS = "diversos",
+  PORCAO = "Porções",
+  BEBIDA = "Bebidas",
+  COMBO = "Combos",
+  DIVERSOS = "Diversos",
 }

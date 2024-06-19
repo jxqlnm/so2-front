@@ -11,8 +11,9 @@ export function NumberField(props: NumberFieldProps) {
   };
 
   return (
-    <div className="flex space-x-3">
+    <div className="space-x-3">
       <label>{props.nome}</label>
+      <br></br>
       <input
         className="items-center w-72 h-auto p-1 rounded-md border-2"
         type="number"

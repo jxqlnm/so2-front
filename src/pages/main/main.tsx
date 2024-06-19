@@ -31,16 +31,17 @@ export function Main() {
   return (
     <div className="bg-base-100">
       <Carousel />
-      <div className="flex items-start">
+      <div className="flex items-center justify-center">
         <h1 className="text-3xl  font-bold">Produtos</h1>
       </div>
 
-      <FiltroProdutos
-        itens={produtos}
-        setItensFiltrados={setProdutosFiltrados}
-      />
-      <SearchField handleSearch={handleSearch} />
-
+      <div className="flex">
+        <FiltroProdutos
+          itens={produtos}
+          setItensFiltrados={setProdutosFiltrados}
+        />
+        <SearchField handleSearch={handleSearch} />
+      </div>
       <div className="flex flex-wrap">
         {produtosFiltrados &&
           produtosFiltrados.map((produto) => {

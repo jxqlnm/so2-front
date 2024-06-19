@@ -32,7 +32,7 @@ export function CreateProduct() {
 
       fileSelected.forEach((f) => {
         const typeFile = f.type.split("/")[1];
-        if (typeFile == "jpeg" || typeFile == "png" || typeFile == "svg") {
+        if (typeFile === "jpeg" || typeFile === "png" || typeFile === "svg") {
           filteredFiles.push(f);
         } else {
           alert(`${f.name} não é uma imagem`);
@@ -56,31 +56,21 @@ export function CreateProduct() {
         valor_venda: valor_venda,
       };
 
-      await api
-        .post("produto", dataSend)
-        .then(async (resp) => {
-          const data: IProduto = resp.data;
-          setMensagem("Produto criado com sucesso!");
-          setModal(true);
-          setTimeout(() => setModal(false), 4000);
-          setNome("");
-          setDescricao("");
-          setValorCompra(0);
-          setValorVenda(0);
-          setQuantEstoque(0);
-          setMinQuantEstoque(0);
-          setLocalEstoque("");
-          setInfoGeral("");
-          setCategoria(null);
-          if (data.id) {
-            salvarImagens(data.id);
-          }
-        })
-        .catch(() => {
-          setMensagem("Erro ao criar o produto");
-          setModalError(true);
-          setInterval(() => setModalError(false), 4000);
-        });
+      try {
+        const resp = await api.post("produto", dataSend);
+        const data: IProduto = resp.data;
+        setMensagem("Produto criado com sucesso!");
+        setModal(true);
+        setTimeout(() => setModal(false), 4000);
+        limparCampos();
+        if (data.id) {
+          salvarImagens(data.id);
+        }
+      } catch (error) {
+        setMensagem("Erro ao criar o produto");
+        setModalError(true);
+        setTimeout(() => setModalError(false), 4000);
+      }
     }
   };
 
@@ -98,9 +88,21 @@ export function CreateProduct() {
         .catch(() => {
           setMensagem("Falha ao salvar imagem!");
           setModalError(true);
-          setInterval(() => setModalError(false), 4000);
+          setTimeout(() => setModalError(false), 4000);
         });
     });
+  };
+
+  const limparCampos = () => {
+    setNome("");
+    setDescricao("");
+    setValorCompra(0);
+    setValorVenda(0);
+    setQuantEstoque(0);
+    setMinQuantEstoque(0);
+    setLocalEstoque("");
+    setInfoGeral("");
+    setCategoria(null);
   };
 
   return (
@@ -109,69 +111,65 @@ export function CreateProduct() {
 
       {modalError && <ModalError mensagem={mensagem} />}
 
-      <h1>Cadastro de Produto</h1>
-      <div className="flex items-start justify-center mt-4 font-medium space-x-5">
-        <div>
-          <form className="space-y-4 justify-items-start">
-            <TextField nome="Nome:" setValor={setNome} valor={nome} />
-            <TextField
-              nome="Descrição:"
-              setValor={setDescricao}
-              valor={descricao}
-            />
-            <NumberField
-              nome="Valor de Compra:"
-              setValor={setValorCompra}
-              valor={valor_compra}
-            />
-            <NumberField
-              nome="Valor de Venda:"
-              setValor={setValorVenda}
-              valor={valor_venda}
-            />
-            <InputFile
-              files={files}
-              setFiles={handleFile}
-              label="Apenas png, jpg e svg"
-            />
-          </form>
-        </div>
+      <div className="flex flex-col items-center justify-center space-y-8">
+        <h1 className="text-2xl font-bold">Cadastrar Produto</h1>
 
-        <div>
-          <form className="space-y-4">
-            <NumberField
-              nome="Quantidade em estoque:"
-              setValor={setQuantEstoque}
-              valor={quant_estoque}
-            />
-            <NumberField
-              nome="Quantidade mínima de estoque:"
-              setValor={setMinQuantEstoque}
-              valor={min_quant_estoque}
-            />
-            <TextField
-              nome="Local do estoque:"
-              setValor={setLocalEstoque}
-              valor={local_estoque}
-            />
-            <TextField
-              nome="Detalhes adicionais:"
-              setValor={setInfoGeral}
-              valor={info_geral}
-            />
-            <SelectionBox
-              lista={listaCategorias}
-              nome="Categorias:"
-              setValor={setCategoria}
-              valor={categoria}
-            />
-          </form>
-        </div>
-      </div>
-      <div className="items-center">
-        <button onClick={salvarProduto} className="btn w-32">
-          Salvar
-        </button>
+        <form className="w-full max-w-lg space-y-4">
+          <TextField nome="Nome" setValor={setNome} valor={nome} />
+          <TextField
+            nome="Descrição"
+            setValor={setDescricao}
+            valor={descricao}
+          />
+          <NumberField
+            nome="Valor de Compra"
+            setValor={setValorCompra}
+            valor={valor_compra}
+          />
+          <NumberField
+            nome="Valor de Venda"
+            setValor={setValorVenda}
+            valor={valor_venda}
+          />
+          <InputFile
+            files={files}
+            setFiles={handleFile}
+            label="PNG, JPG e SVG"
+          />
+
+          <NumberField
+            nome="Quantidade em estoque"
+            setValor={setQuantEstoque}
+            valor={quant_estoque}
+          />
+          <NumberField
+            nome="Quantidade mínima de estoque"
+            setValor={setMinQuantEstoque}
+            valor={min_quant_estoque}
+          />
+          <TextField
+            nome="Local do estoque"
+            setValor={setLocalEstoque}
+            valor={local_estoque}
+          />
+          <TextField
+            nome="Detalhes adicionais"
+            setValor={setInfoGeral}
+            valor={info_geral}
+          />
+          <SelectionBox
+            lista={listaCategorias}
+            nome="Categorias"
+            setValor={setCategoria}
+            valor={categoria}
+          />
+
+          <div className="flex justify-center">
+            <button onClick={salvarProduto} className="btn w-full mdw-32">
+              Salvar
+            </button>
+          </div>
+        </form>
       </div>
     </>
   );
